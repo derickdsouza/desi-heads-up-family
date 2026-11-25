@@ -1,0 +1,145 @@
+.game {
+  min-height: 65svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  padding: 20px 0;
+  gap: 10px;
+}
+.topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-weight: bold;
+}
+.cardword {
+  word-break: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+  font-size: clamp(2.2rem, var(--font, 8vw), 6.5rem);
+  max-width: 100%;
+  margin: auto;
+}
+.game .actions {
+  justify-content: center;
+}
+.good {
+  background: var(--teal);
+  color: white;
+}
+.pass {
+  background: #f0ba62;
+}
+.correct-bg {
+  background: #cdebd2;
+}
+.pass-bg {
+  background: #fbe0ac;
+}
+.gameplay header,
+.gameplay footer {
+  display: none;
+}
+.gameplay main {
+  padding: 0;
+}
+.gameplay .game {
+  min-height: 100svh;
+  padding: max(10px, env(safe-area-inset-top)) 0 max(10px, env(safe-area-inset-bottom));
+}
+dialog {
+  width: min(580px, 95%);
+  max-height: 90svh;
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+}
+dialog::backdrop {
+  background: #24253880;
+}
+dialog h2 {
+  font-size: 1.8em;
+}
+li {
+  margin: 0.55em 0;
+}
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--line);
+  padding: 9px 0;
+}
+.summary-line select {
+  width: auto;
+}
+.summary-line span,
+.badge {
+  overflow-wrap: anywhere;
+}
+#error {
+  color: var(--red);
+  font-weight: 700;
+}
+button {
+  line-height: 1.2;
+}
+@media (max-width: 650px) {
+  header,
+  main,
+  footer {
+    width: calc(100% - 32px);
+  }
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .poster {
+    min-height: 215px;
+  }
+  .postcard {
+    max-width: 250px;
+    padding: 0.7em;
+  }
+  .posterword {
+    margin: 6px 0;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .panel {
+    margin: 22px auto;
+  }
+  .hero h1 {
+    font-size: 4rem;
+  }
+  .hero h1 em {
+    display: inline;
+  }
+  .box,
+  fieldset {
+    padding: 14px;
+  }
+  .topline {
+    font-size: 0.94rem;
+  }
+}
+@media (orientation: landscape) and (max-height: 550px) {
+  .game .actions {
+    margin: 0;
+  }
+  .game {
+    gap: 2px;
+  }
+  .game p {
+    margin: 0.2em;
+  }
+  .game .cardword {
+    font-size: min(var(--font, 8vw), 24vh);
+  }
+}
