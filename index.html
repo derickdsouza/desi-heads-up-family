@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#fff9eb" />
+    <title>Desi Heads Up! · The Family Edition</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="layout.css" />
+    <link rel="stylesheet" href="play.css" />
+    <script defer src="decks.js"></script>
+    <script defer src="motion.js"></script>
+    <script defer src="app.js"></script>
+    <script defer src="setup.js"></script>
+    <script defer src="rounds.js"></script>
+    <script defer src="play.js"></script>
+    <script defer src="scoreboard.js"></script>
+    <script defer src="controls.js"></script>
+    <script defer src="actions.js"></script>
+    <script defer src="events.js"></script>
+  </head>
+  <body>
+    <header>
+      <a href="#home" data-act="home" aria-label="Desi Heads Up home"
+        ><span class="brandmark" aria-hidden="true">✷</span> Desi Heads Up!</a
+      ><button class="link" data-act="help">How to play <b aria-hidden="true">?</b></button>
+    </header>
+    <main id="app"></main>
+    <dialog id="modal">
+      <div id="modalBody"></div>
+      <button class="secondary" data-act="close">Close</button>
+    </dialog>
+    <footer>Desi Heads Up! <span>✦</span> The Family Edition</footer>
+  </body>
+</html>
