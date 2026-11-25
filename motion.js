@@ -10,9 +10,16 @@
     let angle = screenAngle();
     let enabled = false, reason = '', threshold = 35, baseline = null;
     let elevation = null, readAt = -Infinity, fromOrientation = false;
+    let levelSince = null;
     let active = null, calibration = null, timer = null;
     let filtered = null, candidate = null, since = 0, lastScore = 0, gate = 'start';
     const subscriptions = [];
+    // iOS WebKit exposes Core Motion gravity with negative Z when face-up.
+    const nav = win.navigator;
+    const appleMobile = /^(iPhone|iPad|iPod)$/.test(nav?.platform)
+      || (nav?.platform === 'MacIntel' && nav.maxTouchPoints > 1);
+    let gravitySign = appleMobile ? -1 : 1;
+    let up = null;
 
     function listen(target, type, fn) {
       target?.addEventListener(type, fn);
@@ -45,29 +52,44 @@
       invalidate('The phone rotated. Hold it facing your team and recalibrate.');
     }
 
+    function record(value, orientationSample) {
+      const t = now();
+      if (!fromOrientation && t - readAt >= 500) levelSince = null;
+      elevation = value;
+      fromOrientation = orientationSample;
+      readAt = t;
+      if (baseline !== null && Math.abs(value - baseline) <= 15) levelSince ??= t;
+      else levelSince = null;
+    }
+
     function orientationReading(e) {
       if (!Number.isFinite(e.beta) || !Number.isFinite(e.gamma)) return;
       checkAngle();
-      const normalZ = Math.cos(e.beta / degrees) * Math.cos(e.gamma / degrees);
-      elevation = Math.asin(Math.max(-1, Math.min(1, normalZ))) * degrees;
-      fromOrientation = true;
-      readAt = now();
+      const beta = e.beta / degrees, gamma = e.gamma / degrees;
+      const normalZ = Math.cos(beta) * Math.cos(gamma);
+      up = { x: -Math.cos(beta) * Math.sin(gamma), y: Math.sin(beta), z: normalZ };
+      record(Math.asin(Math.max(-1, Math.min(1, normalZ))) * degrees, true);
     }
 
     function motionReading(e) {
       checkAngle();
-      if (fromOrientation && now() - readAt < 350) return;
+      const orientationAge = fromOrientation ? now() - readAt : Infinity;
       const g = e.accelerationIncludingGravity;
       if (!g || ![g.x, g.y, g.z].every(Number.isFinite)) return;
-      fromOrientation = false;
       const magnitude = Math.hypot(g.x, g.y, g.z);
       const a = e.acceleration;
       if (Math.abs(magnitude - 9.81) > 1.8 || (a && Math.hypot(a.x, a.y, a.z) > 2.5)) {
-        elevation = null;
+        if (orientationAge >= 350) elevation = levelSince = null;
         return;
       }
-      elevation = Math.atan2(g.z, Math.hypot(g.x, g.y)) * degrees;
-      readAt = now();
+      // Compare near-simultaneous vectors, including X/Y for an upright
+      // phone. A parallel or antiparallel pair identifies the sensor sign.
+      if (orientationAge < 100) {
+        const alignment = (up.x * g.x + up.y * g.y + up.z * g.z) / magnitude;
+        if (Math.abs(alignment) > 0.95) gravitySign = Math.sign(alignment);
+      }
+      if (orientationAge < 350) return;
+      record(Math.atan2(gravitySign * g.z, Math.hypot(g.x, g.y)) * degrees, false);
     }
 
     async function enable() {
@@ -104,7 +126,10 @@
       const enough = samples.length >= 10 && value !== null;
       if (enough && Math.max(...samples) - Math.min(...samples) <= 10) {
         const mean = samples.reduce((sum, v) => sum + v, 0) / samples.length;
-        if (Math.abs(mean) < 55) baseline = mean;
+        if (Math.abs(mean) < 55) {
+          baseline = mean;
+          levelSince = c.start + 1000;
+        }
       }
       reason = baseline !== null ? '' : !enough
         ? 'No steady motion readings. Try again or use the on-screen buttons.'
@@ -117,14 +142,15 @@
     function step() {
       checkAngle();
       const t = now();
-      // Orientation may report only changes. Allow a steady reading to cover
-      // calibration and a short hold, while bounding how long it can drive play.
-      const value = t - readAt < (fromOrientation ? 3000 : 500) ? elevation : null;
+      // Change-only orientation retains its pose during play. Calibration
+      // still needs a recent reading, and gravity is a streaming sensor.
+      const validFor = fromOrientation ? (calibration ? 3000 : Infinity) : 500;
+      const value = t - readAt < validFor ? elevation : null;
       if (calibration) return sampleCalibration(t, value);
       if (!active) return;
       if (value === null) {
         candidate = filtered = null;
-        if (t - Math.max(readAt, active.start) > (fromOrientation ? 15000 : 2000)) {
+        if (t - Math.max(readAt, active.start) > 2000) {
           invalidate('Motion readings stopped. Recalibrate or use the on-screen buttons.');
         }
         return;
@@ -174,7 +200,9 @@
         stop();
         if (baseline === null) return false;
         active = { gesture, neutral, invalid, start: now() };
-        gate = 'start';
+        // A settled phone can tilt as soon as the first card appears.
+        const settled = levelSince !== null && now() - levelSince >= 200;
+        gate = settled && (fromOrientation || now() - readAt < 500) ? 'ready' : 'start';
         timer = win.setInterval(step, 40);
         return true;
       },

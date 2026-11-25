@@ -165,7 +165,7 @@ test('a sleeping orientation stream yields to live gravity and stale samples can
   assert.equal(await retry, false);
 });
 
-test('an orientation sensor that goes silent indefinitely releases the active turn to manual controls', async () => {
+test('a player can think with the phone upright for twenty seconds before tilting', async () => {
   const r = rig();
   await r.control.enable();
   const ready = r.control.calibrate();
@@ -175,6 +175,70 @@ test('an orientation sensor that goes silent indefinitely releases the active tu
   const seen = [];
   r.control.play(a => seen.push(a), null, msg => seen.push(msg));
   r.tick(20000);
-  assert.match(seen[0], /stopped/);
-  assert.equal(r.control.isCalibrated, false);
+  assert.deepEqual(seen, []);
+  r.orient(180, 40);
+  r.tick(600);
+  assert.deepEqual(seen, ['correct']);
+});
+
+test('the first tilt after the countdown scores from either landscape hold', async () => {
+  for (const [angle, side, pitch, action] of [[90, 1, 180, 'correct'], [270, -1, 0, 'pass']]) {
+    const r = rig();
+    r.win.screen.orientation.angle = angle;
+    await r.control.enable();
+    const ready = r.control.calibrate();
+    r.orient(0, side * 88);
+    r.tick(2000);
+    assert.ok(await ready);
+    r.tick(3000);
+    const seen = [];
+    r.control.play(a => seen.push(a));
+    r.orient(pitch, side * 40);
+    r.tick(600);
+    assert.deepEqual(seen, [action]);
+  }
+});
+
+test('gravity-only iPhone Safari scores screen down and passes screen up', async () => {
+  const r = rig({
+    DeviceOrientationEvent: null, DeviceMotionEvent: class {},
+    navigator: { platform: 'iPhone' },
+  });
+  const gravity = (x, z, ms) => {
+    for (let t = 0; t < ms; t += 40) {
+      r.event('devicemotion', { accelerationIncludingGravity: { x, y: 0, z } });
+      r.tick(40);
+    }
+  };
+  await r.control.enable();
+  const ready = r.control.calibrate();
+  gravity(9.81, 0, 2000);
+  assert.ok(await ready);
+  const seen = [];
+  r.control.play(a => seen.push(a), () => seen.push('next'));
+  gravity(6.93, 6.93, 600);
+  gravity(9.81, 0, 600);
+  gravity(6.93, -6.93, 600);
+  assert.deepEqual(seen, ['correct', 'next', 'pass']);
+});
+
+test('paired sensors agree on tilt direction when gravity takes over', async () => {
+  // Platform alone cannot determine which convention the browser implements.
+  for (const [platform, x] of [['iPhone', -9.81], ['unknown', 9.81]]) {
+    const r = rig({ navigator: { platform }, DeviceMotionEvent: class {} });
+    await r.control.enable();
+    const ready = r.control.calibrate();
+    r.orient(0, 90);
+    r.event('devicemotion', { accelerationIncludingGravity: { x, y: 0, z: 0 } });
+    r.tick(2000);
+    assert.ok(await ready);
+    const seen = [];
+    r.control.play(a => seen.push(a));
+    for (let i = 0; i < 16; i++) {
+      const axis = Math.sign(x) * 6.93;
+      r.event('devicemotion', { accelerationIncludingGravity: { x: axis, y: 0, z: axis } });
+      r.tick(40);
+    }
+    assert.deepEqual(seen, ['correct']);
+  }
 });
