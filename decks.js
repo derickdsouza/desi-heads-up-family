@@ -1,0 +1,100 @@
+const DECKS = {
+  "Classic Bollywood": [
+    "Sholay", "Amitabh Bachchan", "Gabbar Singh", "Basanti", "Raj Kapoor",
+    "Nargis", "Dev Anand", "Hema Malini", "Dharmendra", "Rekha",
+    "Kishore Kumar", "Mohammed Rafi", "Lata Mangeshkar", "Asha Bhosle", "Mughal-e-Azam",
+    "Mother India", "Bobby", "Anand", "Amar Akbar Anthony", "Mr. India",
+    "Pakeezah", "Guide", "Chupke Chupke", "Dilwale Dulhania Le Jayenge", "Madhuri Dixit",
+    "Dilip Kumar", "Madhubala", "Rajesh Khanna", "Sharmila Tagore", "Sanjeev Kumar",
+    "Meena Kumari", "Waheeda Rehman", "Shashi Kapoor", "Shammi Kapoor", "Rishi Kapoor",
+    "Jaya Bachchan", "Asha Parekh", "Helen", "Johnny Walker", "Amrish Puri",
+    "Sridevi", "Anil Kapoor", "Kajol", "Shah Rukh Khan", "Jeetendra",
+    "Deewaar", "Don", "Zanjeer", "Silsila", "Kabhi Kabhie",
+    "Padosan", "Aradhana", "Jewel Thief", "Waqt", "Haqeeqat",
+    "Gol Maal", "Khoobsurat", "Hum Aapke Hain Koun", "Mogambo", "Thakur Baldev Singh"
+  ],
+  "Indian Food": [
+    "Masala dosa", "Idli", "Medu vada", "Samosa", "Pani puri",
+    "Bhel puri", "Jalebi", "Gulab jamun", "Rasgulla", "Biryani",
+    "Filter coffee", "Masala chai", "Papad", "Poha", "Upma",
+    "Pav bhaji", "Vada pav", "Puran poli", "Dhokla", "Chole bhature",
+    "Lassi", "Pickle", "Coconut chutney", "Rasam", "Sambar",
+    "Aloo paratha", "Paneer tikka", "Dal makhani", "Rajma chawal", "Sarson ka saag",
+    "Makki ki roti", "Tandoori chicken", "Butter chicken", "Appam", "Puttu",
+    "Akki roti", "Ragi mudde", "Bisi bele bath", "Lemon rice", "Curd rice",
+    "Kheer", "Kulfi", "Mysore pak", "Besan ladoo", "Kaju katli",
+    "Gajar ka halwa", "Sabudana khichdi", "Dahi vada", "Pakora", "Sugarcane juice"
+  ],
+  "Good Old Days": [
+    "Doordarshan", "Ambassador car", "Premier Padmini", "Bajaj Chetak", "Rotary telephone",
+    "Trunk call", "Inland letter", "Telegram", "Postcard", "Cassette player",
+    "Transistor radio", "Black-and-white television", "Binaca Geetmala", "Tape recorder", "Video cassette",
+    "Gramophone", "Fountain pen", "Carbon paper", "Typewriter", "Hand-wound watch",
+    "Sunday newspaper", "Railway reservation counter", "Photo album", "Film camera", "PCO telephone booth",
+    "Antakshari on the radio", "Sunday TV Mahabharat", "Ramayan on television", "Chitrahaar", "Malgudi Days",
+    "Amar Chitra Katha", "Chandamama magazine", "Stamp collecting", "Pencil box with a sliding lid", "School slate",
+    "Chalk and duster", "Inkpot", "Paper bus ticket", "Slide rule", "Kerosene lantern",
+    "Charcoal iron", "Hand pump", "Ice cream cart", "Bioscope", "Hand-painted cinema poster",
+    "Gilli danda", "Marbles", "Spinning top", "Photo studio portrait", "TV antenna on the roof"
+  ],
+  "Everyday India": [
+    "Pressure cooker", "Mosquito coil", "Autorickshaw", "Steel tiffin", "Ceiling fan",
+    "Coconut scraper", "Mixie", "Umbrella", "Water tanker", "Safety pin",
+    "Sewing machine", "Gas cylinder", "Clothesline", "Rice cooker", "Rolling pin",
+    "Broom", "Steel tumbler", "Brass lota", "Tea strainer", "Pickle jar",
+    "Idli stand", "Tawa", "Mortar and pestle", "Hot water bottle", "Bathing bucket",
+    "Cane basket", "Cloth shopping bag", "Door mat", "Rubber slippers", "Raincoat",
+    "Mosquito net", "Water drum", "Clay water pot", "Wall clock", "Torchlight",
+    "Doorbell", "Padlock", "Comb", "Hair oil", "Hand fan",
+    "Spectacle case", "Dining bench", "Rickshaw meter", "Railway platform", "Vegetable vendor",
+    "Milk packet", "Newspaper delivery", "Tailor shop", "Barber shop", "Cobbler"
+  ],
+  "Mangalorean Special": [
+    "Neer dosa", "Kori rotti", "Chicken sukka", "Mangalore buns", "Goli baje",
+    "Sardine curry (boothai gassi)", "Anjal fry", "Bangude pulimunchi", "Prawn ghee roast", "Kane fry",
+    "Pathrode", "Patoli", "Semige (rice noodles)", "Sanna", "Khotto",
+    "Pork bafat", "Mangalorean roce", "Vorn (coconut milk payasam)", "Kuswar", "Rose cookies",
+    "Kulkuls", "Chakkuli", "Jackfruit appa", "Moode", "Raw mango pickle (appe midi)",
+    "Mangalore tiled roof", "Coconut grove", "Areca nut tree", "Cashew fruit", "Fishing boat",
+    "Yakshagana", "Pilivesha (tiger dance)", "Kambala", "Aati amavasya", "Bhoota Kola",
+    "Monti Fest", "Kadri Manjunath Temple", "Kudroli Temple", "Kateel Temple", "St. Aloysius Chapel",
+    "Milagres Church", "Rosario Cathedral", "Udupi Krishna Temple", "Panambur Beach", "Tannirbhavi Beach",
+    "Surathkal lighthouse", "Netravati River", "Sultan Battery", "Hampankatta", "Kadri Park"
+  ],
+  "Act It Out": [
+    "Threading a needle", "Making a paper boat", "Climbing a coconut tree", "Sweeping the courtyard", "Grinding spices by hand",
+    "Rolling chapatis", "Serving tea", "Peeling a banana", "Eating a very hot chilli", "Eating a sour lemon",
+    "Drinking hot coffee", "Stirring a big pot", "Flipping a dosa", "Opening a tight jar", "Cracking a coconut",
+    "Pumping water", "Pulling a bucket from a well", "Washing clothes by hand", "Wringing a towel", "Hanging wet clothes",
+    "Ironing a shirt", "Folding a sari", "Tying shoelaces", "Combing your hair", "Shaving a beard",
+    "Brushing your teeth", "Putting on spectacles", "Searching for your glasses", "Walking in heavy rain", "Opening an umbrella",
+    "Swatting a mosquito", "Chasing a fly", "Catching a butterfly", "Walking like a duck", "Stretching like a cat",
+    "Walking with a walking stick", "Taking a nap", "Snoring loudly", "Waking up late", "Sneezing",
+    "Ringing a temple bell", "Playing the tabla", "Playing the flute", "Playing cricket", "Flying a kite",
+    "Pedalling a bicycle", "Rowing a boat", "Hailing a taxi", "Missing the bus", "Taking a photograph"
+  ],
+  "Indian Festivals & Traditions": [
+    "Diwali", "Holi", "Dussehra", "Navratri", "Ganesh Chaturthi",
+    "Janmashtami", "Makar Sankranti", "Pongal", "Onam", "Ugadi",
+    "Gudi Padwa", "Vishu", "Baisakhi", "Lohri", "Durga Puja",
+    "Raksha Bandhan", "Maha Shivaratri", "Ram Navami", "Hanuman Jayanti", "Karva Chauth",
+    "Eid al-Fitr", "Eid al-Adha", "Guru Nanak Jayanti", "Christmas", "Easter",
+    "Palm Sunday", "Good Friday", "Ash Wednesday", "Rangoli", "Oil lamp (diya)",
+    "Paper lantern (kandil)", "Marigold garland", "Mango leaf toran", "Sindoor", "Wedding mehendi",
+    "Haldi ceremony", "Sangeet", "Baraat", "Wedding garland exchange", "Lighting a wedding lamp",
+    "Aarti", "Prasad", "Garba", "Dandiya", "Onam flower carpet (pookalam)",
+    "Ganesh visarjan", "Breaking the Dahi Handi", "Burning Ravan’s effigy", "Eid seviyan", "Christmas crib"
+  ],
+  "Famous Indians": [
+    "Mahatma Gandhi", "Jawaharlal Nehru", "Sardar Vallabhbhai Patel", "Subhas Chandra Bose", "Bhagat Singh",
+    "Rani Lakshmibai", "Savitribai Phule", "Dr. B. R. Ambedkar", "Sarojini Naidu", "Lal Bahadur Shastri",
+    "Indira Gandhi", "Rajendra Prasad", "C. Rajagopalachari", "K. Kamaraj", "Atal Bihari Vajpayee",
+    "Swami Vivekananda", "Ramakrishna Paramahamsa", "Guru Nanak", "Adi Shankaracharya", "Basavanna",
+    "Rabindranath Tagore", "R. K. Narayan", "Munshi Premchand", "R. K. Laxman", "Ruskin Bond",
+    "Satyajit Ray", "Ustad Bismillah Khan", "Pandit Ravi Shankar", "M. S. Subbulakshmi", "Zakir Hussain (tabla)",
+    "Bhimsen Joshi", "M. Visvesvaraya", "C. V. Raman", "Srinivasa Ramanujan", "A. P. J. Abdul Kalam",
+    "Homi Bhabha", "Vikram Sarabhai", "J. R. D. Tata", "Verghese Kurien", "M. S. Swaminathan",
+    "Ratan Tata", "Dhyan Chand", "Milkha Singh", "P. T. Usha", "Kapil Dev",
+    "Sunil Gavaskar", "Sachin Tendulkar", "Rahul Dravid", "Prakash Padukone", "Viswanathan Anand"
+  ]
+};
