@@ -1,0 +1,201 @@
+.poster {
+  min-height: 340px;
+  border-radius: 22px;
+  background: repeating-conic-gradient(
+    from 45deg at 50% 128%,
+    #efb952 0deg 9deg,
+    #f4c971 9deg 18deg
+  );
+  border: 2px solid #55432f;
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.poster:before,
+.poster:after {
+  content: "✺";
+  position: absolute;
+  font-size: 8rem;
+  font-family: Georgia;
+  color: var(--red);
+  left: -0.25em;
+  top: -0.2em;
+  line-height: 1;
+}
+.poster:after {
+  left: auto;
+  top: auto;
+  bottom: -0.27em;
+  right: -0.2em;
+}
+.postcard {
+  width: 73%;
+  background: #fff1ca;
+  color: var(--teal);
+  border: 3px solid var(--ink);
+  border-radius: 14px;
+  box-shadow: 8px 8px 0 #273846;
+  transform: rotate(-8deg);
+  padding: 1.1em;
+  text-align: center;
+  z-index: 1;
+}
+.postcard small {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 850;
+}
+.posterword {
+  font-weight: 900;
+  font-size: clamp(2rem, 4.7vw, 3.4rem);
+  line-height: 1.15;
+  margin: 12px 0;
+  border-block: 1px solid #988b60;
+  padding: 0.15em 0;
+}
+.preview {
+  border-top: 1px solid var(--line);
+  padding: 26px 0;
+}
+.preview h2 {
+  font-size: 1.7rem;
+  letter-spacing: -0.04em;
+}
+.decklist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chip {
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  padding: 0.45em 0.8em;
+  font-size: 0.89rem;
+  background: #fffdf3;
+}
+footer {
+  margin-top: auto;
+  padding: 24px 0;
+  color: #5c594d;
+  border-top: 1px solid var(--line);
+  font-size: 0.83rem;
+}
+footer span {
+  color: var(--red);
+  margin: 0 6px;
+}
+main {
+  padding-bottom: 28px;
+}
+.panel {
+  max-width: 780px;
+  margin: 32px auto;
+}
+.panel h1 {
+  margin: 0.18em 0 0.3em;
+}
+.box,
+fieldset,
+details {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fffcf3;
+  padding: 18px;
+  margin: 12px 0;
+}
+fieldset {
+  min-width: 0;
+}
+legend,
+h3,
+summary {
+  font-weight: 800;
+}
+legend {
+  padding: 0 6px;
+}
+summary {
+  cursor: pointer;
+  min-height: 34px;
+}
+.field {
+  display: grid;
+  gap: 5px;
+  margin: 12px 0;
+  font-weight: 650;
+}
+.field input,
+.field select,
+.field textarea,
+select,
+input[type="number"],
+input[type="text"],
+textarea {
+  min-width: 0;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #948a75;
+  border-radius: 6px;
+  background: white;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.check {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  min-height: 44px;
+}
+.check input {
+  min-height: 20px;
+  min-width: 20px;
+  accent-color: var(--teal);
+}
+.blue,
+.orange {
+  border-top: 4px solid var(--blue);
+}
+.orange {
+  border-color: var(--orange);
+}
+.muted,
+small {
+  color: #5b584f;
+}
+.badge {
+  color: var(--blue);
+  font-weight: 800;
+}
+.badge.t1 {
+  color: var(--orange);
+}
+.notice {
+  padding: 12px 16px;
+  background: #f9e3b8;
+  border-radius: 8px;
+}
+.board {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.board td,
+.board th {
+  padding: 10px 5px;
+  border-bottom: 1px solid var(--line);
+  overflow-wrap: anywhere;
+}
+.board td:not(:first-child),
+.board th:not(:first-child) {
+  text-align: right;
+}
+.score {
+  font-size: 2.4em;
+  font-family: Georgia;
+  font-weight: bold;
+}
