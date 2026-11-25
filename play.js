@@ -7,7 +7,13 @@ function gameScreen() {
     cd = t.phase === "countdown",
     word = t.deck[t.cards.length],
     last = t.cards.at(-1),
-    timerText = Math.ceil(t.remaining / 1000);
+    clockAtTop = p || cd,
+    clock =
+      "<span" +
+      (clockAtTop ? "" : ' class="turn-clock"') +
+      ' role="timer" aria-label="Seconds remaining"><span id="clock">' +
+      Math.ceil(t.remaining / 1000) +
+      '</span><span aria-hidden="true">s</span></span>';
   return (
     '<section class="game" style="--font:' +
     { Medium: "6vw", Large: "8.5vw", "Extra large": "11vw" }[cfg.font] +
@@ -17,9 +23,9 @@ function gameScreen() {
     (practice ? "Practice" : esc(cfg.names[t.team])) +
     "</span><span>" +
     esc(practice ? "Warm-up" : round().cat) +
-    '</span><span><span id="clock">' +
-    timerText +
-    '</span>s</span></div><div><p class="kicker">' +
+    "</span>" +
+    (clockAtTop ? clock : "") +
+    '</div><div><p class="kicker">' +
     (p
       ? "Time is paused"
       : cd
@@ -29,7 +35,9 @@ function gameScreen() {
           : practice
             ? "Practice card"
             : "Guess the word") +
-    '</p><h1 class="cardword" aria-live="polite">' +
+    "</p>" +
+    (clockAtTop ? "" : clock) +
+    '<h1 class="cardword" aria-live="polite">' +
     (p
       ? "Paused"
       : cd
